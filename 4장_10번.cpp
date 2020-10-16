@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
 
 int alphabet[26] = {0,};
