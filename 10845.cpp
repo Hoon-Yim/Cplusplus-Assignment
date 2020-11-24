@@ -1,17 +1,17 @@
 /*
  * Last Update : Nov 23 2020
- * Problem : 10828(acmicpc) Stack
- * Link : https://www.acmicpc.net/problem/10828
+ * Problem : 10845(acmicpc) Queue / 큐
+ * Link : https://www.acmicpc.net/problem/10845
  */
 
 #include <iostream>
-#include <stack>
+#include <queue>
 
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
-    std::stack<int> stack;
+    std::queue<int> stack;
 
     int testcase; std::cin >> testcase;
     for(int i = 0; i < testcase; ++i)
@@ -29,7 +29,7 @@ int main() {
                 std::cout << -1 << "\n";
             else
             {
-                std::cout << stack.top() << "\n";
+                std::cout << stack.front() << "\n";
                 stack.pop();
             }
         }
@@ -44,12 +44,19 @@ int main() {
             else
                 std::cout << 0 << "\n";
         }
-        else if(option == "top")
+        else if(option == "front")
         {
             if(stack.empty())
                 std::cout << -1 << "\n";
             else
-                std::cout << stack.top() << "\n";
+                std::cout << stack.front() << "\n";
+        }
+        else if(option == "back")
+        {
+            if(stack.empty())
+                std::cout << -1 << "\n";
+            else
+                std::cout << stack.back() << "\n";
         }
     }
     return 0;

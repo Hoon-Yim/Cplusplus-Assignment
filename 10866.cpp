@@ -1,43 +1,11 @@
+/*
+ * Last Update : Nov 23 2020
+ * Problem : 10866(acmicpc) Deck / 덱
+ * Link : https://www.acmicpc.net/problem/10866
+ */
+
 #include <iostream>
-#include <algorithm>
-#include <random>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <list>
 #include <deque>
-#include <queue>
-#include <stack>
-
-const int MX = 1000005;
-int dat[2 * MX + 1];
-int head = MX, tail = MX;
-
-void push_front(int input)
-{
-    dat[--head] = input;
-}
-void push_back(int input)
-{
-    dat[tail++] = input;
-}
-void pop_front()
-{
-    head++;
-}
-void pop_back()
-{
-    tail--;
-}
-
-int front()
-{
-    return dat[head];
-}
-int back()
-{
-    return dat[tail - 1];
-}
 
 int main() {
     std::ios::sync_with_stdio(false);
