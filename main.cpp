@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <exception>
 #include <utility>
 #include <vector>
 #include <algorithm>
@@ -7,78 +9,135 @@
 #include <stack>
 #include <functional>
 #include <string>
-#include <ncurses.h>
-#include <unistd.h>
+#include <cmath>
 
-class Book
+class Employee
 {
-private:
-    int m_year;
-    std::string m_title;
-    std::string m_author;
+protected:
+    std::string m_name;
+    int m_age;
+
+    std::string m_position;
+    int m_rank;
 
 public:
-    Book(const int& year_in, std::string title_in, std::string author_in)
-        : m_year(year_in), m_title(std::move(title_in)), m_author(std::move(author_in))
+    Employee(std::string name, int age, std::string position, int rank)
+            : m_name(std::move(name)), m_age(age), m_position(std::move(position)), m_rank(rank)
     {}
 
-    int GetYear() const { return m_year; }
-    std::string GetTitle() const { return m_title; }
-    std::string GetAuthor() const { return m_author; }
+    // Copy constructor
+    Employee(const Employee& employee) {
+        m_name = employee.m_name;
+        m_age = employee.m_age;
+        m_position = employee.m_position;
+        m_rank = employee.m_rank;
+    }
 
-    friend std::ostream& operator << (std::ostream& out, const Book& book);
+    // Default Constructor
+    Employee() {}
+
+    friend std::ostream& operator<<(std::ostream& out, const Employee& e);
+    virtual int CalculatePay() const { return 200 + m_rank * 50; }
 };
 
-std::ostream& operator << (std::ostream& out, const Book& book)
+std::ostream& operator<<(std::ostream& out, const Employee& e)
 {
-    out << book.m_year << "년도, " << book.m_title << ", " << book.m_author;
+    out << e.m_name << " (" << e.m_position << " , " << e.m_age << ") ==> "
+              << e.CalculatePay() << "만원";
     return out;
 }
 
+class Manager : public Employee
+{
+private:
+    int m_year_of_service;
+
+public:
+    Manager(std::string name, int age, std::string position, int rank, int year_of_service)
+        : m_year_of_service(year_of_service), Employee(std::move(name), age, std::move(position), rank)
+    {}
+
+    Manager(const Manager& manager)
+        : m_year_of_service(manager.m_year_of_service),
+          Employee(manager.m_name, manager.m_age, manager.m_position, manager.m_rank)
+    {}
+
+    // Default constructor
+    Manager() : Employee() {}
+    int CalculatePay() const override { return 200 + m_rank * 50 + 5 * m_year_of_service; }
+
+    friend std::ostream& operator<<(std::ostream& out, const Manager& m);
+};
+
+std::ostream& operator<<(std::ostream& out, const Manager& m)
+{
+    out << m.m_name << " (" << m.m_position << " , " << m.m_age << ") ==> "
+        << m.CalculatePay() << "만원";
+    return out;
+}
+
+class EmployeeList
+{
+    int m_alloc_employee;
+    int m_current_employee;
+    int m_current_manager;
+    Employee** m_employee_list;
+    Manager** m_manager_list;
+
+public:
+    EmployeeList(const int alloc_in)
+        : m_alloc_employee(alloc_in)
+    {
+        m_employee_list = new Employee*[m_alloc_employee];
+        m_manager_list = new Manager*[m_alloc_employee];
+        m_current_employee = 0;
+        m_current_manager = 0;
+    }
+
+    void AddEmployee(Employee* employee)
+    {
+        m_employee_list[m_current_employee] = employee;
+        m_current_employee++;
+    }
+    void AddManager(Manager* manager)
+    {
+        m_manager_list[m_current_manager] = manager;
+        m_current_manager++;
+    }
+    int CurrentEmployeeNum() const { return m_current_employee; }
+    int currentManagerNum() const { return m_current_manager; }
+    void PrintEmployeeInfo() const
+    {
+        int total_pay = 0;
+
+        for(int i = 0; i < m_current_employee; ++i)
+        {
+            std::cout << *(m_employee_list[i]) << std::endl;
+            total_pay += m_employee_list[i]->CalculatePay();
+        }
+
+        for(int i = 0; i < m_current_manager; ++i)
+        {
+            std::cout << *(m_manager_list[i]) << std::endl;
+            total_pay += m_manager_list[i]->CalculatePay();
+        }
+
+        std::cout << "Total Pay: " << total_pay << std::endl;
+    }
+    ~EmployeeList()
+    {
+        for(int i = 0; i < m_current_employee; ++i)
+            delete m_employee_list[i];
+
+        for(int i = 0; i < m_current_manager; ++i)
+            delete m_manager_list[i];
+
+        delete[] m_employee_list;
+        delete[] m_manager_list;
+    }
+};
 
 int main()
 {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    std::cout.tie(nullptr);
 
-    std::vector<Book> v;
-
-    while(true)
-    {
-        int year = 0;
-        std::string title, author;
-
-        std::cout << "년도>>"; std::cin >> year; std::cin.ignore();
-        if(year == -1)
-            break;
-
-        std::cout << "책이름>>"; std::getline(std::cin, title);
-        std::cout << "저자>>"; std::getline(std::cin, author);
-
-        v.push_back(Book(year, title, author));
-    }
-
-    std::cout << "총 입고된 책은 " << v.size() << "권입니다." << std::endl;
-
-    std::string author;
-    int year = 0;
-
-    std::cout << "검색하고자 하는 저자 이름을 입력하세요>>"; std::getline(std::cin, author);
-    for(auto& i : v)
-    {
-        if(i.GetAuthor() == author)
-        {
-            std::cout << i << std::endl;
-        }
-    }
-
-    std::cout << "검색하고자 하는 년도를 입력하세요>>"; std::cin >> year;
-    for(auto& i : v)
-    {
-        if(i.GetYear() == year)
-        {
-            std::cout << i << std::endl;
-        }
-    }
 }
