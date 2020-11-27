@@ -1,3 +1,9 @@
+/*
+ * Last Update : Nov 27 2020
+ * Problem : 1021(acmicpc) spinning Queue / 회전하는 큐
+ * Link : https://www.acmicpc.net/problem/1021
+ */
+
 #include <iostream>
 #include <deque>
 
