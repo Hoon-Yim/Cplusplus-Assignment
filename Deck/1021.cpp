@@ -1,13 +1,13 @@
 /*
  * Last Update : Nov 27 2020
- * Problem : 1021(acmicpc) spinning Queue / 회전하는 큐
+ * Problem : 1021(acmicpc) Rotating Queue / 회전하는 큐
  * Link : https://www.acmicpc.net/problem/1021
  */
 
 #include <iostream>
 #include <deque>
 
-void spinning(int num, int testcase)
+void rotating(int num, int testcase)
 {
     std::deque<int> deque;
     int count = 0;
@@ -69,5 +69,5 @@ int main()
     std::cin.tie(nullptr);
 
     int num, testcase; std::cin >> num >> testcase;
-    spinning(num, testcase);
+    rotating(num, testcase);
 }

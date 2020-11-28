@@ -1,10 +1,22 @@
+/*
+ * Last Update : Nov 28 2020
+ * Problem : 5430(acmicpc) AC
+ * Link : https://www.acmicpc.net/problem/5430
+ */
+
+/*
+ * 나를 많이 성장시켜준 문제
+ * 문제를 푸는데에 5시간 정도가 걸렸다
+ * 문자열에서 숫자를 뽑아내는 함수를 직접 작성하고
+ * 덱을 Reverse 해야되는데 boolean 타입을 이용해서
+ * 실제로 뒤집지않고 뒤집은 효과를 낼 수 있다는 기법을 알아냄
+ * reverse 함수를 사용하면 시간초과가 걸림
+ * 다른 문제에서도 종종 사용될 것으료 예상됨
+ */
+
 #include <iostream>
 #include <string>
 #include <deque>
-
-// TODOS:
-// Make a function to extract integers from random string
-// Make the main function
 
 std::deque<int> deque;
 
