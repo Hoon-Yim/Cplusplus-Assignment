@@ -1,3 +1,9 @@
+/*
+ * Last Update : Nov 23 2020
+ * Problem : 4949(acmicpc) Balanced World / 균형잡힌 세
+ * Link : https://www.acmicpc.net/problem/4949
+ */
+
 #include <iostream>
 #include <string>
 #include <stack>
@@ -46,6 +52,5 @@ int main()
             std::cout << "yes\n";
         else
             std::cout << "no\n";
-
     }
 }
