@@ -1,24 +1,12 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <stack>
+/*
+ * Last Update : Dec 02 2020
+ * Problem : 1874(acmicpc) Stack sequence / 스택 수열
+ * Link : https://www.acmicpc.net/problem/1874
+ */
 
-//class student
-//{
-//private:
-//    std::string name;
-//    int age;
-//    double height;
-//    double weight;
-//    int grade;
-//
-//public:
-//    void TakeExam();
-//    void TakeClass();
-//    void DoAssignment();
-//    void Study();
-//    void GoToSchool();
-//};
+#include <iostream>
+#include <stack>
+#include <vector>
 
 void sequence(int testcase)
 {
@@ -54,8 +42,8 @@ void sequence(int testcase)
 
     if(stack.empty())
     {
-    for(auto i : symbol)
-        std::cout << i << "\n";
+        for(auto i : symbol)
+            std::cout << i << "\n";
     }
     else
         std::cout << "NO";
