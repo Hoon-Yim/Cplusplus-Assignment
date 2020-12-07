@@ -1,12 +1,17 @@
+/*
+ * Last Update : Dec 06 2020
+ * Problem : 10799(acmicpc) iron bar / 쇠막대기
+ * Link : https://www.acmicpc.net/problem/10799
+ */
+
 #include <iostream>
-#include <utility>
-#include <list>
 #include <stack>
-#include <queue>
-#include <deque>
 
 int main()
 {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr); std::cout.tie(nullptr);
+
     std::string input; std::cin >> input;
     std::stack<char> brackets;
     int result = 0;

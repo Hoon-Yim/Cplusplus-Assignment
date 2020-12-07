@@ -1,6 +1,6 @@
 /*
  * Last Update : Nov 23 2020
- * Problem : 10866(acmicpc) Deck / 덱
+ * Problem : 10866(acmicpc) Deque / 덱
  * Link : https://www.acmicpc.net/problem/10866
  */
 

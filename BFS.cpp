@@ -1,7 +1,6 @@
 #include <iostream>
 #include <utility>
 #include <vector>
-#include <stack>
 #include <queue>
 
 /*
@@ -13,7 +12,7 @@
  * 그 값을 기준으로 또 사방팔방을 체크한다
  *
  * 위의 연산을 계속해서 반복한다
- /
+ */
 
 int board[502][502];
 bool vis[502][502];

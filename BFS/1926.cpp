@@ -20,29 +20,37 @@
  */
 
 int board[502][502];
-bool vis[502][502];
+bool vis[502][502]; // vis = visited
 int dx[4] = { 1, 0, -1, 0 };
 int dy[4] = { 0, 1, 0, -1 };
 
 int main()
 {
+    // x and y defines size of the paint board
     int x, y; std::cin >> x >> y;
     int paint_num = 0, max = 0;
 
+    // drawing a picture
     for(int i = 0; i < x; ++i)
         for(int j = 0; j < y; ++j)
             std::cin >> board[i][j];
 
+    // this double for loop will find the start points of the paints
     for(int i = 0; i < x; ++i)
     {
         for(int j = 0; j < y; ++j)
         {
+            // if it is not a paint or it was already visited
+            // then it will just jump to the next
             if(board[i][j] == 0 || vis[i][j]) continue;
-            paint_num++;
-            int area = 0;
+
+            // this is the beginning of the picture
+            // 'cause the above if statement didn't meet
+            paint_num++; // so the number of paint should be increased
+            int area = 0; // this will store 넓이
             vis[i][j] = true;
             std::queue<std::pair<int, int>> Q;
-            Q.push({i, j});
+            Q.push({i, j}); // storing the starting point
 
             while(!Q.empty())
             {
@@ -59,6 +67,8 @@ int main()
                     Q.push({nx, ny});
                 }
             }
+
+            // we have to get the biggest area
             max = std::max(max, area);
         }
     }
