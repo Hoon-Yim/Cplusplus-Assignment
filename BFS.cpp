@@ -14,48 +14,80 @@
  * 위의 연산을 계속해서 반복한다
  */
 
-int board[502][502];
-bool vis[502][502];
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
+std::string board[1002];
+int VF[1002][1002];
+int VJ[1002][1002];
+int dx[4]{ 1, 0, -1, 0 };
+int dy[4]{ 0, 1, 0, -1 };
 
 int main()
 {
-    int x, y; std::cin >> x >> y;
-    int paint_num = 0, max = 0;
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr); std::cout.tie(nullptr);
 
-    for(int i = 0; i < x; ++i)
-        for(int j = 0; j < y; ++j)
-            std::cin >> board[i][j];
+    int r, c; std::cin >> r >> c;
+    std::queue<std::pair<int, int>> F;
+    std::queue<std::pair<int, int>> J;
 
-    for(int i = 0; i < x; ++i)
+    for(int i = 0; i < r; ++i)
     {
-        for(int j = 0; j < y; ++j)
+        std::fill(VF[i], VF[i] + c, -1);
+        std::fill(VJ[i], VJ[i] + c, -1);
+    }
+
+    for(int i = 0; i < r; ++i)
+        std::cin >> board[i];
+
+    for(int i = 0; i < r; ++i)
+        for(int j = 0; j < c; ++j)
         {
-            if(board[i][j] == 0 || vis[i][j]) continue;
-            paint_num++;
-            int area = 0;
-            vis[i][j] = true;
-            std::queue<std::pair<int, int>> Q;
-            Q.push({i, j});
-
-            while(!Q.empty())
+            if(board[i][j] == 'F')
             {
-                area++;
-                std::pair<int, int> cur = Q.front(); Q.pop();
-
-                for(int dir = 0; dir < 4; ++dir)
-                {
-                    int nx = cur.first + dx[dir];
-                    int ny = cur.second + dy[dir];
-                    if(nx < 0 || nx >= x || ny < 0 || ny >= y) continue;
-                    if(vis[nx][ny] || board[nx][ny] != 1) continue;
-                    vis[nx][ny] = true;
-                    Q.push({nx, ny});
-                }
+                F.push({i, j});
+                VF[i][j] = 0;
             }
-            max = std::max(max, area);
+            else if(board[i][j] == 'J')
+            {
+                J.push({i, j});
+                VJ[i][j] = 0;
+            }
+        }
+
+    while(!F.empty())
+    {
+        auto cur = F.front(); F.pop();
+
+        for(int dir = 0; dir < 4; ++dir)
+        {
+            int dirx = cur.first + dx[dir];
+            int diry = cur.second + dy[dir];
+            if(dirx < 0 || diry < 0 || dirx >= r || diry >= c) continue;
+            if(VF[dirx][diry] >= 0 || board[dirx][diry] == '#') continue;
+            VF[dirx][diry] = VF[cur.first][cur.second] + 1;
+            F.push({dirx, diry});
         }
     }
-    std::cout << paint_num << "\n" << max;
+
+    while(!J.empty())
+    {
+        auto cur = J.front(); J.pop();
+
+        for (int dir = 0; dir < 4; ++dir)
+        {
+            int dirx = cur.first + dx[dir];
+            int diry = cur.second + dy[dir];
+            if(dirx < 0 || diry < 0 || dirx >= r || diry >= c)
+            {
+                std::cout << VJ[cur.first][cur.second] + 1;
+                return 0;
+            }
+            if(VJ[dirx][diry] >= 0 || board[dirx][diry] == '#') continue;
+            if(VF[dirx][diry] != -1 && VF[dirx][diry] <= VJ[cur.first][cur.second] + 1) continue;
+
+            VJ[dirx][diry] = VJ[cur.first][cur.second] + 1;
+            J.push({dirx, diry});
+        }
+    }
+
+    std::cout << "IMPOSSIBLE";
 }
