@@ -37,8 +37,15 @@ int main()
     std::queue<std::pair<int, int>> F;
     std::queue<std::pair<int, int>> J;
 
+
     for(int i = 0; i < r; ++i)
         std::cin >> board[i];
+
+    for(int i = 0; i < r; ++i)
+    {
+        std::fill(VF[i], VF[i] + c, -1);
+        std::fill(VJ[i], VJ[i] + c, -1);
+    }
 
     for(int i = 0; i < r; ++i)
         for(int j = 0; j < c; ++j)
@@ -46,12 +53,50 @@ int main()
             if(board[i][j] == 'J')
             {
                 J.push({i, j});
-                VJ[i][j] = 1;
+                VJ[i][j] = 0;
             }
             else if(board[i][j] == 'F')
             {
                 F.push({i, j});
-                VF[i][j] = 1;
+                VF[i][j] = 0;
             }
         }
+
+    // Fire
+    while(!F.empty())
+    {
+        auto cur = F.front(); F.pop();
+
+        for(int dir = 0; dir < 4; ++dir)
+        {
+            int nx = cur.first + dx[dir];
+            int ny = cur.second + dy[dir];
+            if(nx < 0 || ny < 0 || nx >= r || ny >= c) continue;
+            if(VF[nx][ny] >= 0 || board[nx][ny] == '#') continue;
+            VF[nx][ny] = VF[cur.first][cur.second] + 1;
+            F.push({nx, ny});
+        }
+    }
+
+    while(!J.empty())
+    {
+        auto cur = J.front(); J.pop();
+
+        for(int dir = 0; dir < 4; ++dir)
+        {
+            int nx = cur.first + dx[dir];
+            int ny = cur.second + dy[dir];
+            if(nx < 0 || ny < 0 || nx >= r || ny >= c)
+            {
+                std::cout << VJ[cur.first][cur.second] + 1;
+                return 0;
+            }
+            if(VJ[nx][ny] >= 0 || board[nx][ny] == '#') continue;
+            if(VF[nx][ny] != 1 && VF[nx][ny] <= VJ[cur.first][cur.second] + 1) continue;
+            VJ[nx][ny] = VJ[cur.first][cur.second] + 1;
+            J.push({nx, ny});
+        }
+    }
+
+    std::cout << "IMPOSSIBLE";
 }
